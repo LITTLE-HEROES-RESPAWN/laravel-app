@@ -1,11 +1,7 @@
 FROM mysql/mysql-server:8.0
 LABEL maintainer="littleheroes <support@littleheroes.jp>"
 
-ENV MYSQL_DATABASE=laravel_app \
-    MYSQL_USER=littlehero \
-    MYSQL_PASSWORD=secret \
-    MYSQL_ROOT_PASSWORD=secret \
-    TZ=Asia/Tokyo
+ARG DOCKERDIR
 
-COPY ./docker/mysql/my.cnf /etc/my.cnf
+COPY ${DOCKERDIR}/mysql/my.cnf /etc/my.cnf
 RUN chmod 644 /etc/my.cnf

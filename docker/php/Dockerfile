@@ -2,6 +2,9 @@ FROM php:8.1-fpm-buster
 LABEL maintainer="littleheroes <support@littleheroes.jp>"
 SHELL ["/bin/bash", "-oeux", "pipefail", "-c"]
 
+ARG WORKDIR \
+    DOCKERDIR
+
 # timezone
 ENV TZ=Asia/Tokyo \
     # locale
@@ -26,7 +29,7 @@ RUN apt-get update && \
     composer config -g process-timeout 3600 && \
     composer config -g repos.packagist composer https://packagist.org
 
-COPY ./docker/php/php-fpm.d/zzz-www.conf /usr/local/etc/php-fpm.d/zzz-www.conf
-COPY ./docker/php/php.ini /usr/local/etc/php/php.ini
+COPY ${DOCKERDIR}/php/php-fpm.d/zzz-www.conf /usr/local/etc/php-fpm.d/zzz-www.conf
+COPY ${DOCKERDIR}/php/php.ini /usr/local/etc/php/php.ini
 
-WORKDIR /src
+WORKDIR ${WORKDIR}
