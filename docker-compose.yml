@@ -26,3 +26,24 @@ services:
         target: /root/.config/psysh
         volume:
           nocopy: true
+  web:
+    build:
+      context: .
+      dockerfile: ./docker/nginx/Dockerfile
+    # ポート番号
+    ports:
+      - target: 80
+        protocol: tcp
+        mode: host
+        published: 80
+    volumes:
+      # 作業ファイルの同期
+      - type: bind
+        source: ./src
+        target: /src
+      # unixドメインソケット通信
+      - type: volume
+        source: php-fpm-socket
+        target: /var/run/php-fpm
+        volume:
+          nocopy: true
