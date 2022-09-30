@@ -4,8 +4,10 @@ volumes:
     php-fpm-socket:
     psysh-store:
     db-store:
+    maildir: {}
 
 services:
+  # アプリケーションコンテナ
   app:
     build:
       context: .
@@ -30,6 +32,7 @@ services:
         target: /root/.config/psysh
         volume:
           nocopy: true
+  # Webサーバーコンテナ
   web:
     build:
       context: .
@@ -54,6 +57,7 @@ services:
         target: /var/run/php-fpm
         volume:
           nocopy: true
+  # データベースコンテナ
   db:
     build:
       context: .
@@ -78,3 +82,15 @@ services:
       - MYSQL_USER=${MYSQL_USER}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+  # メールサーバーコンテナ
+  mail:
+    image: mailhog/mailhog
+    # ポート番号
+    ports:
+      - "8025:8025"
+    # データの保存
+    volumes:
+      - maildir:/tmp
+    environment:
+      MH_STORAGE: maildir
+      MH_MAILDIR_PATH: /tmp
