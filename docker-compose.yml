@@ -94,3 +94,18 @@ services:
     environment:
       MH_STORAGE: maildir
       MH_MAILDIR_PATH: /tmp
+  # ストレージコンテナ
+  storage:
+    image: minio/minio:latest
+    ports:
+      - 9000:9999
+      - 9001:9001
+    volumes:
+      - ${DOCKERDIR}/minio/export:/export
+      - ${DOCKERDIR}/minio/policies:/policies
+    entrypoint: sh
+    command: -c
+      "/opt/bin/minio server /export --address :9999 --console-address :9001;"
+    environment:
+      - MINIO_ACCESS_KEY=root
+      - MINIO_SECRET_KEY=password
