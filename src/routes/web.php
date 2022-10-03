@@ -18,3 +18,4 @@ Route::get('/', function () {
 });
 
 Route::get('test', [\App\Http\Controllers\TestController::class, 'test']);
+Route::get('now', [\App\Http\Controllers\TestController::class, 'now']);
