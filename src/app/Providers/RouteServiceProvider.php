@@ -17,7 +17,7 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @var string
      */
-    public const HOME = '/home';
+    public const HOME = '/dashboard';
 
     /**
      * Define your route model bindings, pattern filters, and other route configuration.
@@ -35,14 +35,23 @@ class RouteServiceProvider extends ServiceProvider
 
             Route::middleware('web')
                 ->group(base_path('routes/web.php'));
+
+            // 追加
+            if (
+                config('app.env') === 'local' &&
+                file_exists($debugFile = base_path('routes/debug.php'))
+            ) {
+                Route::middleware('web')
+                    ->group($debugFile);
+            }
         });
     }
 
     /**
-     * Configure the rate limiters for the application.
-     *
-     * @return void
-     */
+         * Configure the rate limiters for the application.
+         *
+         * @return void
+         */
     protected function configureRateLimiting()
     {
         RateLimiter::for('api', function (Request $request) {
