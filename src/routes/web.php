@@ -17,5 +17,5 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('test', [\App\Http\Controllers\TestController::class, 'test']);
-Route::get('now', [\App\Http\Controllers\TestController::class, 'now']);
+Route::get('test', [\App\Http\Controllers\TestController::class, 'test'])->name('test');
+Route::get('now', [\App\Http\Controllers\TestController::class, 'now'])->name('now');

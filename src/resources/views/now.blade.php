@@ -106,11 +106,11 @@
                     現在の時刻は、<b>{{ $now }}</b>です。（リロードすると時刻も更新されます。）
                 </p>
                 <p class="card-text">
-                    以下のボタンを押すと、http://localhost/testへと遷移します。
+                    以下のボタンを押すと、{{ route('test') }}へと遷移します。
                 </p>
             </div>
             <div class="card-actions">
-                <button class="btn neumorphism neu-flat" onclick="location.href='http://localhost/test'">
+                <button class="btn neumorphism neu-flat" onclick="location.href='{{ route('test') }}'">
                     test.blade.phpで作った画面へ
                 </button>
             </div>
