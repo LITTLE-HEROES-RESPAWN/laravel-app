@@ -46,6 +46,8 @@ services:
         protocol: tcp
         mode: host
         published: ${WEB_PORT:-80}
+      # Vite用
+      - 5173:5173
     volumes:
       # 作業ファイルの同期
       - type: bind
