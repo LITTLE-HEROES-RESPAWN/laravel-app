@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ArticleController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,3 +23,7 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 require __DIR__.'/auth.php';
+
+
+Route::get('articles/create', [ArticleController::class, 'create'])->middleware('auth')->name('articles.create');
+Route::post('articles/store', [ArticleController::class, 'store'])->middleware('auth')->name('articles.store');
