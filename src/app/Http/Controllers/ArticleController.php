@@ -29,12 +29,12 @@ class ArticleController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * 登録確認画面の表示
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function createConfirm(Request $request)
     {
         // バリデータの作成
         $validator = Validator::make($request->all(), [
@@ -43,15 +43,43 @@ class ArticleController extends Controller
         ], customAttributes:[
             'content' => '記事内容'
         ]);
-        // バリデーション & 確認済みのデータ
-        $data = $validator->validate();
+        // バリデーション
+        // 失敗したら422エラーを返す
+        $validator->validate();
+        // 確認済みのデータ
+        // バリデーションに書いてあるパラメータのみを取得
+        $data = $validator->safe();
 
         // ユーザー入力値を代入（Articleの「$fillable」に定義された値のみ代入される）
-        $article = Article::make($data);
+        $article = Article::make($data->all());
         // 送信ユーザーを取得
         $user = $request->user();
         // 記事の作成者を$userに紐付ける
         $article->user()->associate($user);
+        // 保存
+        $article->save();
+
+        return view('articles.create_confirm', compact('article'));
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param \App\models\Article $article
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request, Article $article)
+    {
+        $user = $request->user();
+
+        if ($article->user_id !== $user->id) {
+            // ダッシュボードに遷移
+            return redirect()->route('dashboard');
+        }
+
+        // 公開確認完了
+        $article->confirmed = true;
         // 保存
         $article->save();
 

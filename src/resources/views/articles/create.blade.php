@@ -12,7 +12,7 @@
 
                     <p class="mb-4 font-bold text-lg">記事投稿</p>
 
-                    <form action="{{ route('articles.store') }}" method="post">
+                    <form action="{{ route('articles.create.confirm') }}" method="post">
                         @csrf
                         <div class="pb-6">
                             <x-input-label for="article-title" value="タイトル" />
@@ -27,7 +27,8 @@
                             <x-input-error :messages="$errors->get('content')" />
                         </div>
                         <div class="flex">
-                            <x-primary-button class="ml-auto justify-center w-full md:w-auto" type="submit">送信
+                            <x-primary-button class="ml-auto justify-center w-full md:w-auto" type="submit">
+                                確認
                             </x-primary-button>
                         </div>
                     </form>

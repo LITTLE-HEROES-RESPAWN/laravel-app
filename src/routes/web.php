@@ -26,4 +26,5 @@ require __DIR__.'/auth.php';
 
 
 Route::get('articles/create', [ArticleController::class, 'create'])->middleware('auth')->name('articles.create');
-Route::post('articles/store', [ArticleController::class, 'store'])->middleware('auth')->name('articles.store');
+Route::post('articles/create/confirm', [ArticleController::class, 'createConfirm'])->middleware('auth')->name('articles.create.confirm');
+Route::put('articles/store/{article}', [ArticleController::class, 'store'])->middleware('auth')->name('articles.store');
