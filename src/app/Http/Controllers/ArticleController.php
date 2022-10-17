@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Article;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class ArticleController extends Controller
@@ -15,7 +16,8 @@ class ArticleController extends Controller
      */
     public function index()
     {
-        //
+        $articles =  Article::where('confirmed', true)->get();
+        return view('articles.index', compact('articles'));
     }
 
     /**
@@ -96,6 +98,18 @@ class ArticleController extends Controller
     public function show($id)
     {
         //
+    }
+
+    /**
+     * 自分が所有する記事一覧
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function myPage()
+    {
+        $articles = Article::where('user_id', Auth::id())->get();
+        $title = 'マイページ';
+        return view('articles.index', compact('articles', 'title'));
     }
 
     /**

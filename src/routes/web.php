@@ -24,7 +24,14 @@ Route::get('/dashboard', function () {
 
 require __DIR__.'/auth.php';
 
-
-Route::get('articles/create', [ArticleController::class, 'create'])->middleware('auth')->name('articles.create');
-Route::post('articles/create/confirm', [ArticleController::class, 'createConfirm'])->middleware('auth')->name('articles.create.confirm');
-Route::put('articles/store/{article}', [ArticleController::class, 'store'])->middleware('auth')->name('articles.store');
+Route::prefix('articles')
+    ->middleware('auth')
+    ->controller(ArticleController::class)
+    ->name('articles.')
+    ->group(function () {
+        Route::get('', 'index')->name('index');
+        Route::get('mypage', 'myPage')->name('index.mypage');
+        Route::get('create', 'create')->name('create');
+        Route::post('create/confirm', 'createConfirm')->name('create.confirm');
+        Route::put('store', 'store')->name('store');
+    });
