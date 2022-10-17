@@ -35,7 +35,8 @@
                                     </thead>
                                     <tbody class="bg-white ">
                                         @foreach ($articles as $article)
-                                            <tr class="hover:bg-slate-50 active:bg-slate-100 cursor-pointer">
+                                            <tr class="hover:bg-slate-50 active:bg-slate-100 cursor-pointer"
+                                                onclick="location.href='{{ route('articles.show', $article->id) }}'">
                                                 <td
                                                     class="{{ $cls['td'] }} pl-8 text-lg
                                                     @if ($article->confirmed) font-bold @else text-slate-600 @endif">
