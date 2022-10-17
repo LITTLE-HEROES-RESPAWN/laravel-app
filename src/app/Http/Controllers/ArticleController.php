@@ -97,6 +97,9 @@ class ArticleController extends Controller
      */
     public function show(Article $article)
     {
+        if (Auth::id() !== $article->user_id && !$article->confirmed) {
+            abort(404);
+        }
         return view('articles.show', compact('article'));
     }
 
