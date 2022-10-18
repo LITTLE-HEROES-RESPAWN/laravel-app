@@ -223,4 +223,41 @@ class ArticleController extends Controller
         // マイページに遷移
         return redirect()->route('article.index.mypage');
     }
+
+    /**
+     * 完全削除確認
+     *
+     * @param  \App\Models\Article  $article
+     * @return \Illuminate\Http\Response
+     */
+    public function forceDeleteConfirm(Article $article)
+    {
+        // 本人確認
+        if ($article->user_id !== Auth::id()) {
+            return redirect()->route('dashboard');
+        }
+
+        // 削除確認画面に遷移
+        return view('articles.force_delete_confirm', compact('article'));
+    }
+
+    /**
+     * 完全削除
+     *
+     * @param  \App\Models\Article  $article
+     * @return \Illuminate\Http\Response
+     */
+    public function forceDelete(Article $article)
+    {
+        // 本人確認
+        if ($article->user_id !== Auth::id()) {
+            return redirect()->route('dashboard');
+        }
+
+        // 削除
+        $article->forceDelete();
+
+        // マイページに遷移
+        return redirect()->route('articles.index.mypage');
+    }
 }

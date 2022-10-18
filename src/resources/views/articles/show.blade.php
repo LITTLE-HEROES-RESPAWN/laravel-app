@@ -22,6 +22,10 @@
                                         ゴミ箱から取り出す
                                     </x-primary-button>
                                 </form>
+                                <x-primary-button class="ml-3 py-0" color="red.lighten" type="button"
+                                    onclick="location.href='{{ route('articles.forceDelete.confirm', $article->id) }}'">
+                                    完全削除
+                                </x-primary-button>
                             @else
                                 <x-primary-button class="ml-auto py-0" color="amber.lighten" type="button"
                                     onclick="location.href='{{ route('articles.edit', $article->id) }}'">
