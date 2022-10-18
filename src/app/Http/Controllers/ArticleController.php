@@ -204,4 +204,23 @@ class ArticleController extends Controller
         // マイページに遷移
         return redirect()->route('articles.index.mypage');
     }
+    /**
+     * 削除済みデータの復元
+     *
+     * @param  \App\Models\Article  $article
+     * @return \Illuminate\Http\Response
+     */
+    public function restore(Article $article)
+    {
+        // 本人確認
+        if ($article->user_id !== Auth::id()) {
+            return redirect()->route('dashboard');
+        }
+
+        // 復元
+        $article->restore();
+
+        // マイページに遷移
+        return redirect()->route('article.index.mypage');
+    }
 }

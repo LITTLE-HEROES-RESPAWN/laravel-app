@@ -40,7 +40,7 @@ Route::prefix('articles')
         Route::put('{article}', 'update')->name('update');
         Route::get('delete/{article}', 'destroyConfirm')->name('destroy.confirm');
         Route::delete('{article}', 'destroy')->name('destroy');
-        Route::put('restore/{article}', 'restore')->name('restore');
+        Route::put('restore/{article}', 'restore')->name('restore')->withTrashed();
         Route::get('force_delete/{article}', 'forceDeleteConfirm')->name('forceDelete.confirm');
         Route::delete('force/{article}', 'forceDelete')->name('forceDelete');
     });

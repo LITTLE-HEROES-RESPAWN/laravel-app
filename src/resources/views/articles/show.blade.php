@@ -12,15 +12,26 @@
 
                     <div class="flex mb-4">
                         <p class="font-bold text-lg text-slate-700">記事編集</p>
-                        @if ($article->user_id === Auth::id() && !$article->trashed())
-                            <x-primary-button class="ml-auto py-0" color="amber.lighten" type="button"
-                                onclick="location.href='{{ route('articles.edit', $article->id) }}'">
-                                編集
-                            </x-primary-button>
-                            <x-primary-button class="ml-3 py-0" color="red.lighten" type="button"
-                                onclick="location.href='{{ route('articles.destroy.confirm', $article->id) }}'">
-                                削除
-                            </x-primary-button>
+                        @if ($article->user_id === Auth::id())
+                            @if ($article->trashed())
+                                <form class="ml-auto" action="{{ route('articles.restore', $article->id) }}"
+                                    method="post">
+                                    @method('PUT')
+                                    @csrf
+                                    <x-primary-button class="py-0 h-full" color="amber.lighten" type="submit">
+                                        ゴミ箱から取り出す
+                                    </x-primary-button>
+                                </form>
+                            @else
+                                <x-primary-button class="ml-auto py-0" color="amber.lighten" type="button"
+                                    onclick="location.href='{{ route('articles.edit', $article->id) }}'">
+                                    編集
+                                </x-primary-button>
+                                <x-primary-button class="ml-3 py-0" color="red.lighten" type="button"
+                                    onclick="location.href='{{ route('articles.destroy.confirm', $article->id) }}'">
+                                    削除
+                                </x-primary-button>
+                            @endif
                         @endif
                     </div>
 
