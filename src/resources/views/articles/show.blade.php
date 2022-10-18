@@ -17,6 +17,10 @@
                                 onclick="location.href='{{ route('articles.edit', $article->id) }}'">
                                 編集
                             </x-primary-button>
+                            <x-primary-button class="ml-3 py-0" color="red.lighten" type="button"
+                                onclick="location.href='{{ route('articles.destroy.confirm', $article->id) }}'">
+                                削除
+                            </x-primary-button>
                         @endif
                     </div>
 

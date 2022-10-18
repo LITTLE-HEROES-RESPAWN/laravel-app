@@ -157,13 +157,39 @@ class ArticleController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * 削除確認
      *
-     * @param  int  $id
+     * @param  \App\Models\Article  $article
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroyConfirm(Article $article)
     {
-        //
+        // 本人確認
+        if ($article->user_id !== Auth::id()) {
+            return redirect()->route('dashboard');
+        }
+
+        // 削除確認画面を表示
+        return view('articles.destroy_confirm', compact('article'));
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\Article  $article
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Article $article)
+    {
+        // 本人確認
+        if ($article->user_id !== Auth::id()) {
+            return redirect()->route('dashboard');
+        }
+
+        // 削除
+        $article->delete();
+
+        // マイページに遷移
+        return redirect()->route('articles.index.mypage');
     }
 }
