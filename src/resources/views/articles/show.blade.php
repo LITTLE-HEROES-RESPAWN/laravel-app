@@ -12,7 +12,7 @@
 
                     <div class="flex mb-4">
                         <p class="font-bold text-lg text-slate-700">記事編集</p>
-                        @if ($article->user_id === Auth::id())
+                        @if ($article->user_id === Auth::id() && !$article->trashed())
                             <x-primary-button class="ml-auto py-0" color="amber.lighten" type="button"
                                 onclick="location.href='{{ route('articles.edit', $article->id) }}'">
                                 編集

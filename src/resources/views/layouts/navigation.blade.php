@@ -21,6 +21,9 @@
                     <x-nav-link :href="route('articles.index.mypage')" :active="request()->routeIs('articles.index.mypage')">
                         マイページ
                     </x-nav-link>
+                    <x-nav-link :href="route('articles.index.garbage')" :active="request()->routeIs('articles.index.garbage')">
+                        ゴミ箱
+                    </x-nav-link>
                 </div>
             </div>
 

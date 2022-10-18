@@ -97,7 +97,7 @@ class ArticleController extends Controller
      */
     public function show(Article $article)
     {
-        if (Auth::id() !== $article->user_id && !$article->confirmed) {
+        if (Auth::id() !== $article->user_id && (!$article->confirmed || $article->trashed())) {
             abort(404);
         }
         return view('articles.show', compact('article'));
@@ -112,6 +112,18 @@ class ArticleController extends Controller
     {
         $articles = Article::where('user_id', Auth::id())->get();
         $title = 'マイページ';
+        return view('articles.index', compact('articles', 'title'));
+    }
+
+    /**
+     * 自分が所有する記事のゴミ箱
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function garbage()
+    {
+        $articles = Article::where('user_id', Auth::id())->onlyTrashed()->get();
+        $title = 'ゴミ箱';
         return view('articles.index', compact('articles', 'title'));
     }
 

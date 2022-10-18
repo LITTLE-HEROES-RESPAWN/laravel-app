@@ -34,7 +34,7 @@ Route::prefix('articles')
         Route::get('garbage', 'garbage')->name('index.garbage');
         Route::get('create', 'create')->name('create');
         Route::get('edit/{article}', 'edit')->name('edit');
-        Route::get('{article}', 'show')->name('show');
+        Route::get('{article}', 'show')->name('show')->withTrashed();
         Route::post('create/confirm', 'createConfirm')->name('create.confirm');
         Route::put('store', 'store')->name('store');
         Route::put('{article}', 'update')->name('update');
