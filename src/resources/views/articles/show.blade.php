@@ -10,7 +10,15 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white   border-b border-gray-200">
 
-                    <p class="mb-4 font-bold text-lg text-slate-700">記事詳細</p>
+                    <div class="flex mb-4">
+                        <p class="font-bold text-lg text-slate-700">記事編集</p>
+                        @if ($article->user_id === Auth::id())
+                            <x-primary-button class="ml-auto py-0" color="amber.lighten" type="button"
+                                onclick="location.href='{{ route('articles.edit', $article->id) }}'">
+                                編集
+                            </x-primary-button>
+                        @endif
+                    </div>
 
                     <div class="not-prose relative bg-slate-50 rounded-xl overflow-hidden  ">
                         <div class="relative rounded-xl overflow-auto border-2 border-slate-100">

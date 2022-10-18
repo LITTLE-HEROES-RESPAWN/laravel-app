@@ -32,7 +32,9 @@ Route::prefix('articles')
         Route::get('', 'index')->name('index');
         Route::get('mypage', 'myPage')->name('index.mypage');
         Route::get('create', 'create')->name('create');
+        Route::get('edit/{article}', 'edit')->name('edit');
         Route::get('{article}', 'show')->name('show');
         Route::post('create/confirm', 'createConfirm')->name('create.confirm');
         Route::put('store', 'store')->name('store');
+        Route::put('{article}', 'update')->name('update');
     });

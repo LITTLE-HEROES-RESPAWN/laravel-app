@@ -118,24 +118,42 @@ class ArticleController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Article  $article
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Article $article)
     {
-        //
+        if ($article->user_id !== Auth::id()) {
+            return redirect()->route('dashboard');
+        }
+        return view('articles.edit', compact('article'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\Article  $article
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Article $article)
     {
-        //
+        if ($article->user_id !== Auth::id()) {
+            return redirect()->route('dashboard');
+        }
+
+        $validator = Validator::make($request->all(), [
+            'title' => ['required', 'string', 'max:255'],
+            'content' => 'required|string|max:5000',
+        ], customAttributes:[
+            'content' => '記事内容'
+        ]);
+        $data = $validator->validate();
+
+        $article->fill($data);
+        $article->save();
+
+        return redirect()->route('dashboard');
     }
 
     /**
