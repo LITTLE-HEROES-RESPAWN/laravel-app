@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,3 +19,14 @@ Route::get('/dashboard', function () {
 
 
 require __DIR__.'/admin_auth.php';
+
+
+// ユーザー管理
+Route::prefix('users')
+    ->controller(UserController::class)
+    ->name('users.')
+    ->middleware('auth:admin')
+    ->group(function () {
+        Route::get('', 'index')->name('index');
+        Route::get('{user}', 'show')->name('show');
+    });
