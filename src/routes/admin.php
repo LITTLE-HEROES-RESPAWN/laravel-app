@@ -13,8 +13,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::get('/dashboard', function () {
-    return 'Admin Route';
-})->middleware('auth:admin');
+    return view('admin.dashboard');
+})->middleware('auth:admin')->name('dashboard');
 
 
 require __DIR__.'/admin_auth.php';
