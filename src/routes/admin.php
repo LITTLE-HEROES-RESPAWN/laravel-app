@@ -15,3 +15,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('/dashboard', function () {
     return 'Admin Route';
 })->middleware('auth:admin');
+
+
+require __DIR__.'/admin_auth.php';
