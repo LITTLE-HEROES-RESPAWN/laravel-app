@@ -3,11 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Article\CreateConfirmRequest;
+use App\Http\Requests\Article\DeleteRequest;
+use App\Http\Requests\Article\EditRequest;
+use App\Http\Requests\Article\ForceDeleteRequest;
+use App\Http\Requests\Article\RestoreRequest;
+use App\Http\Requests\Article\ShowRequest;
+use App\Http\Requests\Article\StoreRequest;
 use App\Http\Requests\Article\UpdateRequest;
 use App\Models\Article;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
 
 class ArticleController extends Controller
 {
@@ -51,19 +56,12 @@ class ArticleController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \App\Http\Requests\Article\StoreRequest  $request
      * @param \App\models\Article $article
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Article $article)
+    public function store(StoreRequest $request, Article $article)
     {
-        $user = $request->user();
-
-        if ($article->user_id !== $user->id) {
-            // ダッシュボードに遷移
-            return redirect()->route('dashboard');
-        }
-
         // 公開確認完了
         $article->confirmed = true;
         // 保存
@@ -76,14 +74,12 @@ class ArticleController extends Controller
     /**
      * Display the specified resource.
      *
+     * @param  \App\Http\Requests\Article\ShowRequest  $request
      * @param  \App\Models\Article  $article
      * @return \Illuminate\Http\Response
      */
-    public function show(Article $article)
+    public function show(ShowRequest $request, Article $article)
     {
-        if (Auth::id() !== $article->user_id && (!$article->confirmed || $article->trashed())) {
-            abort(404);
-        }
         return view('articles.show', compact('article'));
     }
 
@@ -114,14 +110,12 @@ class ArticleController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
+     * @param  \App\Http\Requests\Article\EditRequest  $request
      * @param  \App\Models\Article  $article
      * @return \Illuminate\Http\Response
      */
-    public function edit(Article $article)
+    public function edit(EditRequest $request, Article $article)
     {
-        if ($article->user_id !== Auth::id()) {
-            return redirect()->route('dashboard');
-        }
         return view('articles.edit', compact('article'));
     }
 
@@ -144,16 +138,12 @@ class ArticleController extends Controller
     /**
      * 削除確認
      *
+     * @param  \App\Http\Requests\Article\DeleteRequest  $request
      * @param  \App\Models\Article  $article
      * @return \Illuminate\Http\Response
      */
-    public function destroyConfirm(Article $article)
+    public function destroyConfirm(DeleteRequest $request, Article $article)
     {
-        // 本人確認
-        if ($article->user_id !== Auth::id()) {
-            return redirect()->route('dashboard');
-        }
-
         // 削除確認画面を表示
         return view('articles.destroy_confirm', compact('article'));
     }
@@ -161,16 +151,12 @@ class ArticleController extends Controller
     /**
      * Remove the specified resource from storage.
      *
+     * @param  \App\Http\Requests\Article\DeleteRequest  $request
      * @param  \App\Models\Article  $article
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Article $article)
+    public function destroy(DeleteRequest $request, Article $article)
     {
-        // 本人確認
-        if ($article->user_id !== Auth::id()) {
-            return redirect()->route('dashboard');
-        }
-
         // 削除
         $article->delete();
 
@@ -180,16 +166,12 @@ class ArticleController extends Controller
     /**
      * 削除済みデータの復元
      *
+     * @param  \App\Http\Requests\Article\RestoreRequest  $request
      * @param  \App\Models\Article  $article
      * @return \Illuminate\Http\Response
      */
-    public function restore(Article $article)
+    public function restore(RestoreRequest $request, Article $article)
     {
-        // 本人確認
-        if ($article->user_id !== Auth::id()) {
-            return redirect()->route('dashboard');
-        }
-
         // 復元
         $article->restore();
 
@@ -200,16 +182,12 @@ class ArticleController extends Controller
     /**
      * 完全削除確認
      *
+     * @param  \App\Http\Requests\Article\ForceDeleteRequest  $request
      * @param  \App\Models\Article  $article
      * @return \Illuminate\Http\Response
      */
-    public function forceDeleteConfirm(Article $article)
+    public function forceDeleteConfirm(ForceDeleteRequest $request, Article $article)
     {
-        // 本人確認
-        if ($article->user_id !== Auth::id()) {
-            return redirect()->route('dashboard');
-        }
-
         // 削除確認画面に遷移
         return view('articles.force_delete_confirm', compact('article'));
     }
@@ -217,16 +195,12 @@ class ArticleController extends Controller
     /**
      * 完全削除
      *
+     * @param  \App\Http\Requests\Article\ForceDeleteRequest  $request
      * @param  \App\Models\Article  $article
      * @return \Illuminate\Http\Response
      */
-    public function forceDelete(Article $article)
+    public function forceDelete(ForceDeleteRequest $request, Article $article)
     {
-        // 本人確認
-        if ($article->user_id !== Auth::id()) {
-            return redirect()->route('dashboard');
-        }
-
         // 削除
         $article->forceDelete();
 
