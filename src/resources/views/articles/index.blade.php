@@ -63,6 +63,9 @@
                         <div class="absolute inset-0 pointer-events-none border border-black/5 rounded-xl">
                         </div>
                     </div>
+                    <div class="mt-6">
+                        {{ $articles->links() }}
+                    </div>
                 </div>
             </div>
         </div>

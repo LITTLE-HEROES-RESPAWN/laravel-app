@@ -18,7 +18,7 @@ class ArticleController extends Controller
      */
     public function index()
     {
-        $articles =  Article::where('confirmed', true)->get();
+        $articles =  Article::where('confirmed', true)->paginate(15);
         return view('articles.index', compact('articles'));
     }
 
