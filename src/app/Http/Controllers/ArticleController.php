@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Article\CreateConfirmRequest;
+use App\Http\Requests\Article\UpdateRequest;
 use App\Models\Article;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -33,34 +35,16 @@ class ArticleController extends Controller
     /**
      * 登録確認画面の表示
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\Article\CreateConfirmRequest  $request
+     * @param  \App\Models\Article  $article
      * @return \Illuminate\Http\Response
      */
-    public function createConfirm(Request $request)
+    public function createConfirm(CreateConfirmRequest $request)
     {
-        // バリデータの作成
-        $validator = Validator::make($request->all(), [
-            'title' => ['required', 'string', 'max:5'],
-            'content' => 'required|string|max:5000',
-        ], customAttributes:[
-            'content' => '記事内容'
-        ]);
-        // バリデーション
-        // 失敗したら422エラーを返す
-        $validator->validate();
-        // 確認済みのデータ
-        // バリデーションに書いてあるパラメータのみを取得
-        $data = $validator->safe();
-
-        // ユーザー入力値を代入（Articleの「$fillable」に定義された値のみ代入される）
-        $article = Article::make($data->all());
-        // 送信ユーザーを取得
+        $article = Article::make($request->validated());
         $user = $request->user();
-        // 記事の作成者を$userに紐付ける
         $article->user()->associate($user);
-        // 保存
         $article->save();
-
         return view('articles.create_confirm', compact('article'));
     }
 
@@ -144,27 +128,16 @@ class ArticleController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\Article\UpdateRequest  $request
      * @param  \App\Models\Article  $article
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Article $article)
+    public function update(UpdateRequest $request, Article $article)
     {
-        if ($article->user_id !== Auth::id()) {
-            return redirect()->route('dashboard');
-        }
+        // 評価済み入力値を適用して保存
+        $article->fill($request->validated())->save();
 
-        $validator = Validator::make($request->all(), [
-            'title' => ['required', 'string', 'max:255'],
-            'content' => 'required|string|max:5000',
-        ], customAttributes:[
-            'content' => '記事内容'
-        ]);
-        $data = $validator->validate();
-
-        $article->fill($data);
-        $article->save();
-
+        // ダッシュボードに遷移
         return redirect()->route('dashboard');
     }
 
