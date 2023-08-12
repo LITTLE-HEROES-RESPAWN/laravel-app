@@ -1,7 +1,7 @@
 <x-admin-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-slate-800 leading-tight">
-            User
+            Article
         </h2>
     </x-slot>
 
@@ -16,15 +16,17 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 ">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white   border-b border-gray-200">
+
                     <div class="flex mb-4">
-                        <p class="font-bold text-lg text-slate-700">{{ $title ?? 'ユーザー一覧' }}</p>
-                        {{-- ボタン追加 --}}
+                        <p class="font-bold text-lg text-slate-700">{{ $title ?? '記事一覧' }}</p>
+                        {{-- CSVダウンロードボタン --}}
                         <x-primary-button class="ml-auto py-0" color="amber.lighten" type="button"
-                            onclick="location.href='{{ route('admin.users.download') }}'">
+                            onclick="location.href='{{ route('admin.articles.download') }}'">
                             CSVダウンロード
                         </x-primary-button>
                     </div>
-                    <div class="not-prose relative bg-slate-50 rounded-xl overflow-hidden  ">
+
+                    <div class="not-prose relative bg-slate-50 rounded-xl overflow-hidden">
                         <div class="absolute inset-0 bg-grid-slate-100
                             [mask-image:linear-gradient(0deg,#fff,rgba(255,255,255,0.6))] "
                             style="background-position: 10px 10px;"></div>
@@ -33,23 +35,26 @@
                                 <table class="border-collapse table-fixed w-full text-sm">
                                     <thead>
                                         <tr>
-                                            <th class="{{ $cls['th'] }} pl-8">ID</th>
-                                            <th class="{{ $cls['th'] }}">名前</th>
-                                            <th class="{{ $cls['th'] }} pr-8">登録日</th>
+                                            <th class="{{ $cls['th'] }} pl-8">タイトル</th>
+                                            <th class="{{ $cls['th'] }}">作成日</th>
+                                            <th class="{{ $cls['th'] }} pr-8">最終更新日</th>
                                         </tr>
                                     </thead>
                                     <tbody class="bg-white ">
-                                        @foreach ($users as $user)
+                                        @foreach ($articles as $article)
+                                            {{-- 詳細画面へのリンク --}}
                                             <tr class="hover:bg-slate-50 active:bg-slate-100 cursor-pointer"
-                                                onclick="location.href='{{ route('admin.users.show', $user->id) }}'">
-                                                <td class="{{ $cls['td'] }} pl-8">
-                                                    {{ $user->id }}
+                                                onclick="location.href='{{ route('admin.articles.show', $article->id) }}'">
+                                                <td
+                                                    class="{{ $cls['td'] }} pl-8 text-lg
+                                                        @if ($article->confirmed) font-bold @else text-slate-600 @endif">
+                                                    {{ $article->title }}
                                                 </td>
                                                 <td class="{{ $cls['td'] }}">
-                                                    {{ $user->name }}
+                                                    {{ $article->created_at->format('Y年m月d日 H:i') }}
                                                 </td>
                                                 <td class="{{ $cls['td'] }} pr-8">
-                                                    {{ $user->created_at->format('Y年m月d日 H:i') }}
+                                                    {{ $article->updated_at->format('Y年m月d日 H:i') }}
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -59,6 +64,9 @@
                         </div>
                         <div class="absolute inset-0 pointer-events-none border border-black/5 rounded-xl">
                         </div>
+                    </div>
+                    <div class="mt-6">
+                        {{ $articles->links() }}
                     </div>
                 </div>
             </div>
