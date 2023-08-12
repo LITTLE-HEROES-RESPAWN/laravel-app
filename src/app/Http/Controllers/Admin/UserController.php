@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Services\TxtService;
 use App\Traits\Csv;
 use Illuminate\Http\Request;
 
@@ -38,7 +39,7 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function download()
+    public function download(TxtService $filesystem)
     {
         // ユーザー一覧の取得
         $users = User::all();
@@ -48,6 +49,11 @@ class UserController extends Controller
             'id', 'name', 'email', 'login_id', 'created_at'
         ];
 
-        return $this->downloadCsv($users, $csvHeaders);
+        // データの整形
+        $data = $users->map(
+            fn (User $user) => $user->only($csvHeaders)
+        )->prepend($csvHeaders);
+
+        return $filesystem->downloadResponse($data);
     }
 }

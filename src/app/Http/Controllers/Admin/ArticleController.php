@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Article;
+use App\Services\FilesystemInterface;
 use App\Traits\Csv;
 use Illuminate\Http\Request;
 
@@ -40,16 +41,24 @@ class ArticleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function download()
+    public function download(FilesystemInterface $filesystem)
     {
-        // 記事一覧の取得（公開済のものだけ）
-        $articles = Article::where('confirmed', true)->get();
-
         // 出力する情報
         $csvHeaders = [
             'id', 'title', 'created_at', 'updated_at', 'user_id', 'confirmed', 'deleted_at'
         ];
 
-        return $this->downloadCsv($articles, $csvHeaders);
+        /**
+         * 記事一覧の取得（公開済のものだけ）
+         * @var \Illuminate\Database\Eloquent\Collection
+         */
+        $articles = Article::where('confirmed', true)->get();
+
+        // データの整形
+        $data = $articles->map(
+            fn (Article $article) => $article->only($csvHeaders)
+        )->prepend($csvHeaders);
+
+        return $filesystem->downloadResponse($data);
     }
 }
