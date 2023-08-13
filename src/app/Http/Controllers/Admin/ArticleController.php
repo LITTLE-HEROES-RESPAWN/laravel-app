@@ -50,15 +50,10 @@ class ArticleController extends Controller
 
         /**
          * 記事一覧の取得（公開済のものだけ）
-         * @var \Illuminate\Database\Eloquent\Collection
+         * @var \Illuminate\Support\LazyCollection
          */
-        $articles = Article::where('confirmed', true)->get();
+        $articles = Article::select($csvHeaders)->where('confirmed', true)->lazy(1000);
 
-        // データの整形
-        $data = $articles->map(
-            fn (Article $article) => $article->only($csvHeaders)
-        )->prepend($csvHeaders);
-
-        return $filesystem->downloadResponse($data);
+        return $filesystem->downloadResponse($articles, header:$csvHeaders);
     }
 }

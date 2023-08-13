@@ -7,9 +7,10 @@ interface FilesystemInterface
      * ファイルに書き込む
      *
      * @param mixed $data 書き込み内容
+     * @param array $header ヘッダー
      * @return void
      */
-    public function write(mixed $data);
+    public function write(mixed $data, $header);
 
     /**
      * ストリームを開く
@@ -51,7 +52,8 @@ interface FilesystemInterface
      *
      * @param mixed $records 出力対象レコード
      * @param string $filename ファイル名
+     * @param mixed $header ヘッダー
      * @return \Symfony\Component\HttpFoundation\StreamedResponse
      */
-    public function downloadResponse(mixed $data, string $filename = 'sample.csv');
+    public function downloadResponse(mixed $data, string $filename = 'sample.csv', $header = null);
 }

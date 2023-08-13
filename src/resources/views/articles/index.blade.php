@@ -1,8 +1,18 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-slate-800 leading-tight">
-            Article
-        </h2>
+        <div class="flex justify-between">
+            <h2 class="font-semibold text-xl text-slate-800 leading-tight">
+                Article
+            </h2>
+            <form class="flex" action="{{ route('articles.index') }}">
+                <x-text-input class="border-2 border-indigo-200 px-2" name="word"
+                    value="{{ request()->query('word') }}" />
+                <button
+                    class="ml-1 px-3 focus:outline-none text-sm leading-none text-slate-600 bg-slate-100 active:bg-slate-200 rounded-md">
+                    検索
+                </button>
+            </form>
+        </div>
     </x-slot>
 
     @php

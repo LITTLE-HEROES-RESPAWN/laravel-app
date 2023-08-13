@@ -13,7 +13,7 @@ class TxtService implements FilesystemInterface
      * @param mixed $data 書き込み内容
      * @return void
      */
-    public function write(mixed $data)
+    public function write(mixed $data, $header)
     {
         $stream = $this->open();
 
@@ -87,10 +87,10 @@ class TxtService implements FilesystemInterface
      * @param string $filename ファイル名
      * @return \Symfony\Component\HttpFoundation\StreamedResponse
      */
-    public function downloadResponse(mixed $data, string $filename = 'sample.txt')
+    public function downloadResponse(mixed $data, string $filename = 'sample.txt', $header = null)
     {
         return response()->streamDownload(
-            fn () => $this->write($data),
+            fn () => $this->write($data, $header),
             $filename,
             ['Content-Type' => 'application/octet-stream']
         );
