@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\ArticleController;
 use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -20,6 +21,15 @@ Route::get('/dashboard', function () {
 
 require __DIR__.'/admin_auth.php';
 
+Route::prefix('articles')
+    ->controller(ArticleController::class)
+    ->name('articles.')
+    ->middleware('auth:admin')
+    ->group(function () {
+        Route::get('', 'index')->name('index');
+        Route::get('download', 'download')->name('download');
+        Route::get('{article}', 'show')->name('show');
+    });
 
 // ユーザー管理
 Route::prefix('users')
@@ -28,5 +38,6 @@ Route::prefix('users')
     ->middleware('auth:admin')
     ->group(function () {
         Route::get('', 'index')->name('index');
+        Route::get('download', 'download')->name('download');
         Route::get('{user}', 'show')->name('show');
     });

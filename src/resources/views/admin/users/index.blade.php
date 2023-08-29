@@ -18,6 +18,11 @@
                 <div class="p-6 bg-white   border-b border-gray-200">
                     <div class="flex mb-4">
                         <p class="font-bold text-lg text-slate-700">{{ $title ?? 'ユーザー一覧' }}</p>
+                        {{-- ボタン追加 --}}
+                        <x-primary-button class="ml-auto py-0" color="amber.lighten" type="button"
+                            onclick="location.href='{{ route('admin.users.download') }}'">
+                            CSVダウンロード
+                        </x-primary-button>
                     </div>
                     <div class="not-prose relative bg-slate-50 rounded-xl overflow-hidden  ">
                         <div class="absolute inset-0 bg-grid-slate-100

@@ -44,3 +44,25 @@ Route::prefix('articles')
         Route::get('force_delete/{article}', 'forceDeleteConfirm')->name('forceDelete.confirm')->withTrashed();
         Route::delete('force/{article}', 'forceDelete')->name('forceDelete')->withTrashed();
     });
+
+Route::prefix('contact')
+->name('contacts.')
+->group(function () {
+    // インライン
+    Route::get('', function () {
+        \Mail::raw('SHEEEEEEEP!!', function ($msg) {
+            $msg->to('sheep@littleheroes.jp')->subject('test mail');
+        });
+        return '送信完了!';
+    });
+    // HTMLメール
+    Route::get('html', function () {
+        \Mail::to('sheep@littleheroes.jp')->send(new \App\Mail\TestHtml('テスト送信texttexttexttexttexttexttexttexttext'));
+        return '送信完了!';
+    });
+    // Markdownメール（プレビュー）
+    Route::get('markdown', function () {
+        // ブラウザに表示
+        return new \App\Mail\TestMarkdown();
+    });
+});

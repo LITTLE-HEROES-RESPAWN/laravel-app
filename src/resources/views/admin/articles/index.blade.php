@@ -1,18 +1,8 @@
-<x-app-layout>
+<x-admin-layout>
     <x-slot name="header">
-        <div class="flex justify-between">
-            <h2 class="font-semibold text-xl text-slate-800 leading-tight">
-                Article
-            </h2>
-            <form class="flex" action="{{ route('articles.index') }}">
-                <x-text-input class="border-2 border-indigo-200 px-2" name="word"
-                    value="{{ request()->query('word') }}" />
-                <button
-                    class="ml-1 px-3 focus:outline-none text-sm leading-none text-slate-600 bg-slate-100 active:bg-slate-200 rounded-md">
-                    検索
-                </button>
-            </form>
-        </div>
+        <h2 class="font-semibold text-xl text-slate-800 leading-tight">
+            Article
+        </h2>
     </x-slot>
 
     @php
@@ -29,13 +19,14 @@
 
                     <div class="flex mb-4">
                         <p class="font-bold text-lg text-slate-700">{{ $title ?? '記事一覧' }}</p>
+                        {{-- CSVダウンロードボタン --}}
                         <x-primary-button class="ml-auto py-0" color="amber.lighten" type="button"
-                            onclick="location.href='{{ route('articles.create') }}'">
-                            記事作成
+                            onclick="location.href='{{ route('admin.articles.download') }}'">
+                            CSVダウンロード
                         </x-primary-button>
                     </div>
 
-                    <div class="not-prose relative bg-slate-50 rounded-xl overflow-hidden  ">
+                    <div class="not-prose relative bg-slate-50 rounded-xl overflow-hidden">
                         <div class="absolute inset-0 bg-grid-slate-100
                             [mask-image:linear-gradient(0deg,#fff,rgba(255,255,255,0.6))] "
                             style="background-position: 10px 10px;"></div>
@@ -51,11 +42,12 @@
                                     </thead>
                                     <tbody class="bg-white ">
                                         @foreach ($articles as $article)
+                                            {{-- 詳細画面へのリンク --}}
                                             <tr class="hover:bg-slate-50 active:bg-slate-100 cursor-pointer"
-                                                onclick="location.href='{{ route('articles.show', $article->id) }}'">
+                                                onclick="location.href='{{ route('admin.articles.show', $article->id) }}'">
                                                 <td
                                                     class="{{ $cls['td'] }} pl-8 text-lg
-                                                    @if ($article->confirmed) font-bold @else text-slate-600 @endif">
+                                                        @if ($article->confirmed) font-bold @else text-slate-600 @endif">
                                                     {{ $article->title }}
                                                 </td>
                                                 <td class="{{ $cls['td'] }}">
@@ -80,4 +72,4 @@
             </div>
         </div>
     </div>
-</x-app-layout>
+</x-admin-layout>
